@@ -50,6 +50,12 @@ export interface JesusSaidCard {
   prayer: string;
 }
 
+export interface JesusSaidData {
+  verse: string;
+  message: string;
+  prayer: string;
+}
+
 export interface MessageNote {
   id: string;
   date: string; // YYYY-MM-DD

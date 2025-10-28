@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JesusSaidCard } from '../types';
-import { dailyVerses } from '../constants/constants';
+import { JESUS_SAID_DATA } from '../constants/constants';
 import ConfirmationModal from './ConfirmationModal';
 
 // Reusable component to display a single card's content
@@ -41,8 +41,9 @@ const CardPreview: React.FC<{
           className={`bg-beige-50 rounded-lg shadow-md p-4 w-full aspect-[3/4] flex flex-col justify-center items-center text-center hover:shadow-xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gold-DEFAULT ${isSelected ? 'ring-2 ring-gold-dark' : ''}`}
           aria-label={`查看卡片: ${card.verse}`}
         >
-          <p className="text-sm italic text-gold-dark line-clamp-[5] overflow-hidden text-ellipsis break-words max-h-[7rem] leading-snug">"{card.verse.split('（')[0]}"</p>
-          <p className="text-xs text-gray-500 mt-2">{card.verse.match(/（(.*)）/)?.[1]}</p>
+          <p className="text-sm italic text-gold-dark line-clamp-5 overflow-hidden text-ellipsis break-words leading-snug">
+  "{card.verse.split('—')[1] ? card.verse.split('—')[1].trim() : card.verse}"</p>
+          <p className="text-xs text-gray-500 mt-2">{card.verse.match(/^(.*?)\s*—/)?.[1]}</p>
         </button>
         {!isSelectMode && (
             <button
@@ -88,23 +89,34 @@ const JesusSaidPage: React.FC = () => {
             setError('恩典值不足！');
             return;
         }
+
+        // 找出尚未收集的卡
+        const collectedVerses = new Set(collectedCards.map(c => c.verse));
+        const uncollectedCardsData = JESUS_SAID_DATA.filter(data => !collectedVerses.has(data.verse));
+
+        if (uncollectedCardsData.length === 0) {
+            setError('🎉 恭喜你！已經全數收集完所有福音卡片！');
+            return;
+        }
+
         setIsLoading(true);
         setCurrentCard(null);
         setError('');
 
         setTimeout(() => {
-            const randomVerse = dailyVerses[Math.floor(Math.random() * dailyVerses.length)];
+            // 從未收集的卡中隨機抽一張
+            const randomCardData = uncollectedCardsData[Math.floor(Math.random() * uncollectedCardsData.length)];
             const newCard: JesusSaidCard = {
                 id: crypto.randomUUID(),
                 date: new Date().toISOString().split('T')[0],
-                verse: randomVerse,
-                message: '',
-                prayer: '',
+                verse: randomCardData.verse,
+                message: randomCardData.message,
+                prayer: randomCardData.prayer,
             };
             setCurrentCard(newCard);
             setGracePoints(prev => prev - 3);
             setIsLoading(false);
-        }, 500); // Simulate loading
+        }, 500); // 模擬載入時間
     };
 
     const handleCollectCard = () => {

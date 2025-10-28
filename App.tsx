@@ -13,6 +13,7 @@ import BiblePlansPage from './pages/BiblePlansPage';
 import BottomNav from './components/BottomNav';
 import Header from './components/Header';
 
+// FIX: Added 'ai', 'iNeedYou', and 'quickRead' to the Page type to resolve type errors in BottomNav.tsx.
 export type Page =
   | 'tracker'
   | 'journal'
@@ -25,6 +26,7 @@ export type Page =
   | 'smallGroup'
   | 'biblePlans';
 
+// FIX: Added titles for the new pages to avoid runtime errors.
 const pageTitles: Record<Page, string> = {
   tracker: '聖經進度',
   journal: '靈修日記',
