@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JournalEntry, Comment } from '../types';
-import { BIBLE_BOOKS } from '../constants/constants';
+import { BIBLE_BOOKS } from '../constants';
 import ConfirmationModal from './ConfirmationModal';
 
 type BibleTrackerProgress = Record<string, Record<number, boolean>>;
@@ -43,7 +43,7 @@ const JournalForm: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-30 flex justify-center items-center p-4">
+    <div className="fixed inset-0 bg-black/50 z-20 flex justify-center items-center p-4">
       <div className="bg-beige-50 p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">{entry ? '編輯' : '新增'}日記</h2>
         <div className="space-y-4">
@@ -336,7 +336,7 @@ const JournalPage: React.FC = () => {
                 {/* 日記內容 */}
                 {isExpanded && (
                   <div className="p-4 pt-0 border-t border-gray-200 text-sm space-y-4">
-                    <p><strong></strong> <span className="whitespace-pre-wrap">{entry.highlights}</span></p>
+                    <p className="mt-4"><strong></strong> <span className="whitespace-pre-wrap">{entry.highlights}</span></p>
                     <p><strong className="block mt-4 mb-4 font-semibold text-gold-dark">神想告訴我:</strong> <span className="whitespace-pre-wrap">{entry.godMessage}</span></p>
                   </div>
                 )}
